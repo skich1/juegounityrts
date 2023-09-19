@@ -62,8 +62,11 @@ public class CoreBooter : MonoBehaviour
         AsyncOperation op;
         if (to == "login")
             op = _LoadLogin();
+        else if (to == "menu")
+            op = _LoadMenu();
         else
             op = _LoadMap(map);
+
 
         yield return new WaitUntil(() => _sceneIsLoaded);
 
