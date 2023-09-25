@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MySql.Data.MySqlClient;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 public class LoginManager : MonoBehaviour
@@ -38,6 +39,7 @@ public class LoginManager : MonoBehaviour
         m_networkManager.CheckUser(m_usernameInput.text, m_password.text, delegate (Response response)
         {
             m_text.text = response.message;
+            CoreBooter.instance.LoadMenu();
         });
 
     }

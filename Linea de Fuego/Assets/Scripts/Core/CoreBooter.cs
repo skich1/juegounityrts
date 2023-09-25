@@ -36,7 +36,7 @@ public class CoreBooter : MonoBehaviour
     {
         _sceneIsLoaded = true;
     }
-    public void LoadLogin() => StartCoroutine(_SwitchingScene("login"));  // Cambiado a "login"
+    public void LoadLogin() => StartCoroutine(_SwitchingScene("login"));  
     public void LoadMenu() => StartCoroutine(_SwitchingScene("menu"));
     public void LoadMap(string mapReference)
     {
@@ -105,20 +105,22 @@ public class CoreBooter : MonoBehaviour
     {
         AudioListener prevListener = Object.FindObjectOfType<AudioListener>();
         if (prevListener != null) prevListener.enabled = false;
+
         AsyncOperation op = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
         op.completed += (_) =>
         {
-            Scene s = SceneManager.GetSceneByName("GameScene");
-            if (s != null && s.IsValid())
-                SceneManager.UnloadSceneAsync(s);
-            if (CoreDataHandler.instance.Scene != null)
+            var prevScene = SceneManager.GetSceneByName("Login");
+            if (prevScene.IsValid() && prevScene.isLoaded)
             {
-                s = SceneManager.GetSceneByName(CoreDataHandler.instance.Scene);
-                if (s != null && s.IsValid())
-                    SceneManager.UnloadSceneAsync(s);
+                SceneManager.SetActiveScene(prevScene);
+                SceneManager.UnloadSceneAsync(prevScene);
             }
 
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("MainMenu"));
+            Scene newScene = SceneManager.GetSceneByName("MainMenu");
+            if (newScene.IsValid())
+            {
+                SceneManager.SetActiveScene(newScene);
+            }
         };
         return op;
     }
